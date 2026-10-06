@@ -1,0 +1,31 @@
+services:
+
+  api:
+    build: .
+    command: ["uv", "run", "python", "-m", "app.main", "--api"]
+    ports:
+      - "8080:8080"
+
+  mcp:
+    build: .
+    command: ["uv", "run", "python", "-m", "app.main", "--mcp"]
+    ports:
+      - "9000:9000"
+      
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: unless-stopped
+
+    ports:
+      - "27017:27017"
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
